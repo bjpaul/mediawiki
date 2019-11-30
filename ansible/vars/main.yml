@@ -1,0 +1,14 @@
+mysql_packages:
+  - mariadb-client
+  - mariadb-server
+  - python-mysqldb
+mysql_root_password: "bDuQ&!EggLQ(d2!:"
+mysql_databases:
+  - name: wikidatabase
+    encoding: latin1
+    collation: latin1_general_ci
+mysql_users:
+  - name: wiki
+    host: "%"
+    password: THISpasswordSHOULDbeCHANGED
+    priv: "wikidatabase.*:ALL"

@@ -1,0 +1,9 @@
+---
+
+- name: Install PyMySQL
+  pip:
+    name: PyMySQL
+
+- name: Install boto3
+  pip:
+    name: boto3

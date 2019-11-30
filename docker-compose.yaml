@@ -1,0 +1,24 @@
+version: '3'
+services:
+  mediawiki:
+    depends_on:
+        - database
+    image: mediawiki:1.33
+    restart: always
+    ports:
+      - 8080:80
+    links:
+      - database
+    volumes:
+      - /var/www/html/images
+  database:
+    image: mariadb
+    restart: always
+    environment:
+      # @see https://phabricator.wikimedia.org/source/mediawiki/browse/master/includes/DefaultSettings.php
+      MYSQL_DATABASE: wikidatabase
+      MYSQL_USER: wiki
+      MYSQL_PASSWORD: THISpasswordSHOULDbeCHANGED
+      MYSQL_ROOT_PASSWORD: 'bDuQ&!EggLQ(d2!:'
+    volumes:
+      - /var/lib/mysql

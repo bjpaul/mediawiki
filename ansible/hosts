@@ -1,0 +1,2 @@
+[db-servers]
+mariadb ansible_ssh_host=52.90.18.159 ansible_ssh_port=22 ansible_ssh_user=ubuntu ansible_ssh_private_key_file=/Users/bijoypaul/learning/key/bijoy-own.pem

@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "mediawiki.name" . }}
+  labels:
+{{ include "mediawiki.labels" . | indent 4 }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: {{ include "mediawiki.name" . }}
+      app.kubernetes.io/version: {{ .Chart.Version }}
+  template:
+    metadata:
+      name: {{ include "mediawiki.name" . }}
+      labels:
+        app.kubernetes.io/name: {{ include "mediawiki.name" . }}
+        app.kubernetes.io/version: {{ .Chart.Version }}
+    spec:
+    {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      serviceAccountName: {{ template "mediawiki.serviceAccountName" . }}
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: 80
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 75 # default is 0
+            periodSeconds: 30 #default is 10
+            timeoutSeconds: 5 #default is 1
+            successThreshold: 1 # default is 1
+            failureThreshold: 3 # default is 3
+          readinessProbe:
+            httpGet:
+              path: /
+              port: http
+            initialDelaySeconds: 10 # default is 0
+            periodSeconds: 5 #default is 10
+            timeoutSeconds: 5 #default is 1
+            successThreshold: 3 # default is 1
+            failureThreshold: 5 # default is 3
+          resources:
+            limits:
+              cpu: {{ .Values.resources.limits.cpu }}
+              memory: {{ .Values.resources.limits.memory }}
+            requests:
+              cpu: {{ .Values.resources.requests.cpu }}
+              memory: {{ .Values.resources.requests.memory }}
