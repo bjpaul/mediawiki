@@ -1,5 +1,5 @@
 apiVersion: apps/v1
-kind: Deployment
+kind: StatefulSet
 metadata:
   name: {{ include "mediawiki.name" . }}
   labels:
@@ -55,3 +55,27 @@ spec:
             requests:
               cpu: {{ .Values.resources.requests.cpu }}
               memory: {{ .Values.resources.requests.memory }}
+          volumeMounts:
+            - name: images
+              mountPath: /var/www/html/images
+            - name: config
+              mountPath: /var/www/html/LocalSettings.php
+  volumeClaimTemplates:
+    - metadata:
+        name: images
+        annotations:
+          volume.beta.kubernetes.io/storage-class: "gp2"
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi
+    - metadata:
+        name: config
+        annotations:
+          volume.beta.kubernetes.io/storage-class: "gp2"
+      spec:
+        accessModes: [ "ReadWriteOnce" ]
+        resources:
+          requests:
+            storage: 1Gi

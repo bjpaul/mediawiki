@@ -33,6 +33,9 @@
 
 #Check app on browser using load balancer
 
+~ $ kubectl get svc mediawiki
+NAME        TYPE           CLUSTER-IP      EXTERNAL-IP                                                              PORT(S)        AGE
+mediawiki   LoadBalancer   10.100.225.67   a1d08bef9134b11ea9a970eaa61e8936-254088410.us-east-1.elb.amazonaws.com   80:31929/TCP   94s
 ```
 
 ***Test app scaling***
